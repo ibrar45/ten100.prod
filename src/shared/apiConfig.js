@@ -1,21 +1,23 @@
 import axios from 'axios'
 
-/**
- * Railway backend (used in Vercel rewrites + optional direct API URL).
- * Browser uses same-origin `/api` by default → no CORS on Vercel or Vite dev.
- * Override with `VITE_API_BASE_URL` (full URL) only if your API sends proper CORS for this site.
- */
+/** Production API on Railway (no localhost). */
 const RAILWAY_API_ORIGIN = 'https://ten100compkdeploy-production.up.railway.app'
+const RAILWAY_API_BASE = `${RAILWAY_API_ORIGIN}/api`
 
+/**
+ * - `VITE_API_BASE_URL` if set (full URL, no trailing slash).
+ * - Dev (`npm run dev`): `/api` — Vite proxies to Railway → same-origin, no browser CORS.
+ * - Production build: direct Railway URL (configure CORS on the API for your live site).
+ */
 const explicitApiBase =
   typeof import.meta.env.VITE_API_BASE_URL === 'string'
     ? import.meta.env.VITE_API_BASE_URL.trim().replace(/\/$/, '')
     : ''
 
-/** Relative `/api` (proxied) or full URL if `VITE_API_BASE_URL` is set. */
-export const API_BASE_URL = explicitApiBase !== '' ? explicitApiBase : '/api'
+export const API_BASE_URL =
+  explicitApiBase !== '' ? explicitApiBase : import.meta.env.DEV ? '/api' : RAILWAY_API_BASE
 
-/** HTTP origin for same-origin `fetch` / Socket.IO (matches the page on `/api` mode). */
+/** HTTP origin for `fetch`, Socket.IO, and `${origin}/api/...` when using relative `/api`. */
 export const API_ORIGIN = (() => {
   if (API_BASE_URL.startsWith('http://') || API_BASE_URL.startsWith('https://')) {
     try {
@@ -43,7 +45,7 @@ const getApiOrigin = () => {
     return window.location.origin
   }
 
-  return ''
+  return RAILWAY_API_ORIGIN
 }
 
 export const resolveApiAssetUrl = (path) => {
