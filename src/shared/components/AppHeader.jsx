@@ -9,7 +9,7 @@ import {
   User,
 } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { logoutUser } from '../../application/auth/authService'
+import { logoutUser } from '../../Application/auth/authService'
 import { useAuth } from '../context/useAuth'
 
 function isHeaderNavItemActive(itemKey, pathname) {

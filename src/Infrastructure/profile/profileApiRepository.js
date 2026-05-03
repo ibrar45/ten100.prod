@@ -1,5 +1,5 @@
 import { apiGet, apiPatchRaw } from '../../shared/apiConfig'
-import { mapProfileFromApi } from '../../domain/profile/profileMappers'
+import { mapProfileFromApi } from '../../Domain/profile/profileMappers'
 
 export const createProfileApiRepository = () => ({
   async getMe({ signal } = {}) {

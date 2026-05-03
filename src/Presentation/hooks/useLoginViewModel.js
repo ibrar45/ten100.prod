@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { loginUser, registerUser } from '../../application/auth/authService'
+import { loginUser, registerUser } from '../../Application/auth/authService'
 
 const initialForm = {
   identifier: '',

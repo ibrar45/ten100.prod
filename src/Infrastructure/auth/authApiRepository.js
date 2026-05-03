@@ -1,5 +1,5 @@
 import { apiDelete, apiGet, apiPatchRaw, apiPostRaw } from '../../shared/apiConfig'
-import { mapUserResponse } from '../../domain/auth/authMappers'
+import { mapUserResponse } from '../../Domain/auth/authMappers'
 
 export const createAuthApiRepository = () => ({
   async register({ username, email, password }) {

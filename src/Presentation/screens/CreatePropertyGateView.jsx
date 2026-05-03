@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginUser, registerUser } from '../../application/auth/authService'
+import { loginUser, registerUser } from '../../Application/auth/authService'
 import { fetchProfileMe, updateProfilePartial } from '../../features/profile'
 import { useAuth } from '../../shared/context/useAuth'
 

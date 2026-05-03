@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { changePassword } from '../../application/auth/authService'
+import { changePassword } from '../../Application/auth/authService'
 
 const passwordRules = (password) => [
   {

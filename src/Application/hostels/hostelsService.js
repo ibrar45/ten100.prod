@@ -1,5 +1,5 @@
-import { createHostelsRepositoryContract } from '../../domain/hostels/hostelsRepository'
-import { createHostelsApiRepository } from '../../infrastructure/hostels/hostelsApiRepository'
+import { createHostelsRepositoryContract } from '../../Domain/hostels/hostelsRepository'
+import { createHostelsApiRepository } from '../../Infrastructure/hostels/hostelsApiRepository'
 
 const hostelsRepository = createHostelsRepositoryContract(createHostelsApiRepository())
 

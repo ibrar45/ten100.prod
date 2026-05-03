@@ -1,4 +1,4 @@
-import { fetchHostelBeds, fetchHostelDetails, fetchHostelRooms, fetchHostels } from '../../application/hostels/hostelsService'
+import { fetchHostelBeds, fetchHostelDetails, fetchHostelRooms, fetchHostels } from '../../Application/hostels/hostelsService'
 
 export const hostelApi = {
   listHostels: (options = {}) => fetchHostels(options),

@@ -1,9 +1,9 @@
-import { createAuthRepositoryContract } from '../../domain/auth/authRepository'
+import { createAuthRepositoryContract } from '../../Domain/auth/authRepository'
 import {
   validateLoginInput,
   validateRegisterInput,
-} from '../../domain/auth/authValidators'
-import { createAuthApiRepository } from '../../infrastructure/auth/authApiRepository'
+} from '../../Domain/auth/authValidators'
+import { createAuthApiRepository } from '../../Infrastructure/auth/authApiRepository'
 
 const authRepository = createAuthRepositoryContract(createAuthApiRepository())
 

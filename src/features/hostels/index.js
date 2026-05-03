@@ -16,4 +16,4 @@ export {
   requestHostelRoom,
   trackHostelCallClick,
   updateHostel,
-} from '../../application/hostels/hostelsService'
+} from '../../Application/hostels/hostelsService'

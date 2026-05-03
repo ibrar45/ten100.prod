@@ -1,4 +1,4 @@
-import { changePassword, deleteAccount, fetchCurrentUser, loginUser, logoutUser, registerUser } from '../../application/auth/authService'
+import { changePassword, deleteAccount, fetchCurrentUser, loginUser, logoutUser, registerUser } from '../../Application/auth/authService'
 
 export const authApi = {
   register: (payload) => registerUser(payload),

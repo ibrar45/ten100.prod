@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { fetchSavedItems, removeSavedItem, saveItem } from '../../../features/saved'
-import { isItemSaved, toggleSaveState } from '../../../domain/saved/savedUtils'
+import { isItemSaved, toggleSaveState } from '../../../Domain/saved/savedUtils'
 import { useAuth } from '../../../shared/context/useAuth'
 
 let savedHostelIdCache = new Set()

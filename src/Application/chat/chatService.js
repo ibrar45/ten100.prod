@@ -1,5 +1,5 @@
-import { createChatRepositoryContract } from '../../domain/chat/chatRepository'
-import { createChatApiRepository } from '../../infrastructure/chat/chatApiRepository'
+import { createChatRepositoryContract } from '../../Domain/chat/chatRepository'
+import { createChatApiRepository } from '../../Infrastructure/chat/chatApiRepository'
 
 const chatRepository = createChatRepositoryContract(createChatApiRepository())
 

@@ -1,5 +1,5 @@
-import { createSavedRepositoryContract } from '../../domain/saved/savedRepository'
-import { createSavedApiRepository } from '../../infrastructure/saved/savedApiRepository'
+import { createSavedRepositoryContract } from '../../Domain/saved/savedRepository'
+import { createSavedApiRepository } from '../../Infrastructure/saved/savedApiRepository'
 
 const savedRepository = createSavedRepositoryContract(createSavedApiRepository())
 

@@ -2,4 +2,4 @@ export {
   fetchProfileMe,
   updateProfile,
   updateProfilePartial,
-} from '../../application/profile/profileService'
+} from '../../Application/profile/profileService'

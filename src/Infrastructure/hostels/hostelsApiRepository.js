@@ -1,10 +1,10 @@
 import { apiDelete, apiGet, apiPatchRaw, apiPostForm, apiPostRaw } from '../../shared/apiConfig'
-import { mapHostelBedDetailsFromApi } from '../../domain/hostels/hostelBedDetailsMapper'
-import { mapHostelDetailsFromApi } from '../../domain/hostels/hostelDetailsMapper'
-import { mapHostelFromApi } from '../../domain/hostels/hostelMappers'
-import { mapHostelBedFromApi } from '../../domain/hostels/hostelBedMappers'
-import { mapHostelRoomFromApi } from '../../domain/hostels/hostelRoomMappers'
-import { mapRoomRequestFromApi } from '../../domain/hostels/roomRequestMappers'
+import { mapHostelBedDetailsFromApi } from '../../Domain/hostels/hostelBedDetailsMapper'
+import { mapHostelDetailsFromApi } from '../../Domain/hostels/hostelDetailsMapper'
+import { mapHostelFromApi } from '../../Domain/hostels/hostelMappers'
+import { mapHostelBedFromApi } from '../../Domain/hostels/hostelBedMappers'
+import { mapHostelRoomFromApi } from '../../Domain/hostels/hostelRoomMappers'
+import { mapRoomRequestFromApi } from '../../Domain/hostels/roomRequestMappers'
 
 export const createHostelsApiRepository = () => ({
   /**

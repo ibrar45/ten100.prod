@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { deleteAccount, logoutUser } from '../../application/auth/authService'
+import { deleteAccount, logoutUser } from '../../Application/auth/authService'
 import { fetchProfileMe, updateProfile } from '../../features/profile'
 import { useAuth } from '../../shared/context/useAuth'
 

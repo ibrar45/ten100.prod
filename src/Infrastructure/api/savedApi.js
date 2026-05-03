@@ -1,4 +1,4 @@
-import { fetchSavedItems, removeSavedItem, saveItem } from '../../application/saved/savedService'
+import { fetchSavedItems, removeSavedItem, saveItem } from '../../Application/saved/savedService'
 
 export const savedApi = {
   save: (itemType, itemId, options = {}) => saveItem(itemType, itemId, options),

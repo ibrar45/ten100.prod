@@ -1,6 +1,6 @@
-import { createProfileRepositoryContract } from '../../domain/profile/profileRepository'
-import { buildProfilePatchBody } from '../../domain/profile/profileMappers'
-import { createProfileApiRepository } from '../../infrastructure/profile/profileApiRepository'
+import { createProfileRepositoryContract } from '../../Domain/profile/profileRepository'
+import { buildProfilePatchBody } from '../../Domain/profile/profileMappers'
+import { createProfileApiRepository } from '../../Infrastructure/profile/profileApiRepository'
 
 const profileRepository = createProfileRepositoryContract(
   createProfileApiRepository(),

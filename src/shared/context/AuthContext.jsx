@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AuthContext } from './AuthContextValue'
-import { fetchCurrentUser } from '../../application/auth/authService'
+import { fetchCurrentUser } from '../../Application/auth/authService'
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
