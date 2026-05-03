@@ -6,39 +6,19 @@ import { mapHostelBedFromApi } from '../../Domain/hostels/hostelBedMappers'
 import { mapHostelRoomFromApi } from '../../Domain/hostels/hostelRoomMappers'
 import { mapRoomRequestFromApi } from '../../Domain/hostels/roomRequestMappers'
 
-/**
- * Some routes return `{ success: true, data: [...] }`; others return only `{ data: [...] }`.
- * Treat explicit `success: false` as failure; otherwise accept the first array found in `keys`.
- */
-const takeListPayload = (response, keys, fallbackMessage) => {
-  if (Array.isArray(response)) {
-    return response
-  }
-  if (response?.success === false) {
-    const error = new Error(response?.message || fallbackMessage)
-    error.payload = response
-    throw error
-  }
-  for (const key of keys) {
-    if (Array.isArray(response?.[key])) {
-      return response[key]
-    }
-  }
-  if (response?.success === true) {
-    return []
-  }
-  const error = new Error(response?.message || fallbackMessage)
-  error.payload = response
-  throw error
-}
-
 export const createHostelsApiRepository = () => ({
   /**
    * GET /api/hostels/ — path is /hostels/ because API_BASE_URL ends with /api
    */
   async list({ token, signal } = {}) {
     const response = await apiGet('/hostels/', { token, signal })
-    const rows = takeListPayload(response, ['data', 'hostels'], 'Failed to load hostels')
+    if (!response?.success) {
+      const error = new Error(response?.message || 'Failed to load hostels')
+      error.payload = response
+      throw error
+    }
+
+    const rows = Array.isArray(response.data) ? response.data : []
 
     return {
       success: true,
@@ -88,7 +68,13 @@ export const createHostelsApiRepository = () => ({
   async listRooms({ token, signal } = {}) {
     const response = await apiGet('/hostels/rooms', { token, signal })
 
-    const rows = takeListPayload(response, ['data', 'rooms'], 'Failed to load hostel rooms')
+    if (!response?.success) {
+      const error = new Error(response?.message || 'Failed to load hostel rooms')
+      error.payload = response
+      throw error
+    }
+
+    const rows = Array.isArray(response.data) ? response.data : []
     const count =
       typeof response.meta?.count === 'number' ? response.meta.count : rows.length
 
@@ -105,7 +91,13 @@ export const createHostelsApiRepository = () => ({
   async listBeds({ token, signal } = {}) {
     const response = await apiGet('/hostels/rooms/beds', { token, signal })
 
-    const rows = takeListPayload(response, ['data', 'beds'], 'Failed to load hostel beds')
+    if (!response?.success) {
+      const error = new Error(response?.message || 'Failed to load hostel beds')
+      error.payload = response
+      throw error
+    }
+
+    const rows = Array.isArray(response.data) ? response.data : []
     const count =
       typeof response.meta?.count === 'number' ? response.meta.count : rows.length
     return {

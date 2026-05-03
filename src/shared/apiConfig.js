@@ -95,7 +95,20 @@ export const apiRequest = async (
       signal,
     })
 
-    return response?.data ?? null
+    const data = response?.data ?? null
+    const contentType = String(response?.headers?.['content-type'] ?? '')
+    if (
+      typeof data === 'string' &&
+      (/^\s*</.test(data) || contentType.includes('text/html'))
+    ) {
+      const err = new Error(
+        'Server returned HTML instead of JSON. On Vercel, /api must rewrite to your backend (vercel.json); redeploy after changing it.',
+      )
+      err.status = response?.status
+      throw err
+    }
+
+    return data
   } catch (axiosError) {
     const payload = axiosError?.response?.data ?? null
     const error = new Error(
