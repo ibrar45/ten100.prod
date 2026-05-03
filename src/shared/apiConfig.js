@@ -1,23 +1,34 @@
 import axios from 'axios'
 
-/** Production API (absolute). In `vite` dev, use `/api` so the browser hits same origin → Vite proxy → backend (avoids CORS). */
-const RAILWAY_API_BASE = 'https://ten100compkdeploy-production.up.railway.app/api'
+/**
+ * Railway backend (used in Vercel rewrites + optional direct API URL).
+ * Browser uses same-origin `/api` by default → no CORS on Vercel or Vite dev.
+ * Override with `VITE_API_BASE_URL` (full URL) only if your API sends proper CORS for this site.
+ */
+const RAILWAY_API_ORIGIN = 'https://ten100compkdeploy-production.up.railway.app'
 
-const railwayOrigin = (() => {
-  try {
-    return new URL(RAILWAY_API_BASE).origin
-  } catch {
-    return 'https://ten100compkdeploy-production.up.railway.app'
+const explicitApiBase =
+  typeof import.meta.env.VITE_API_BASE_URL === 'string'
+    ? import.meta.env.VITE_API_BASE_URL.trim().replace(/\/$/, '')
+    : ''
+
+/** Relative `/api` (proxied) or full URL if `VITE_API_BASE_URL` is set. */
+export const API_BASE_URL = explicitApiBase !== '' ? explicitApiBase : '/api'
+
+/** HTTP origin for same-origin `fetch` / Socket.IO (matches the page on `/api` mode). */
+export const API_ORIGIN = (() => {
+  if (API_BASE_URL.startsWith('http://') || API_BASE_URL.startsWith('https://')) {
+    try {
+      return new URL(API_BASE_URL).origin
+    } catch {
+      return RAILWAY_API_ORIGIN
+    }
   }
+  if (typeof globalThis !== 'undefined' && globalThis.location?.origin) {
+    return globalThis.location.origin
+  }
+  return RAILWAY_API_ORIGIN
 })()
-
-export const API_BASE_URL = import.meta.env.DEV ? '/api' : RAILWAY_API_BASE
-
-/** Origin for `fetch(.../api/...)` and Socket.IO when not using a relative `/api` base. */
-export const API_ORIGIN =
-  import.meta.env.DEV && typeof globalThis !== 'undefined' && globalThis.location?.origin
-    ? globalThis.location.origin
-    : railwayOrigin
 
 const getApiOrigin = () => {
   if (API_BASE_URL.startsWith('http://') || API_BASE_URL.startsWith('https://')) {
