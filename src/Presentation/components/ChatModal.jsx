@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
 import { MessageCircle, SendHorizontal, X } from 'lucide-react'
-import { API_ORIGIN } from '../../shared/apiConfig'
+import { API_ORIGIN, SOCKET_IO_ORIGIN } from '../../shared/apiConfig'
 
 function normalizeUserId(user) {
   if (!user || typeof user !== 'object') return null
@@ -73,11 +73,22 @@ export default function ChatModal({
   const [draft, setDraft] = useState('')
   const [sending, setSending] = useState(false)
 
-  const baseUrl = useMemo(() => {
+  const apiPrefix = useMemo(() => {
     const trimmed = typeof apiOrigin === 'string' ? apiOrigin.trim().replace(/\/$/, '') : ''
     return trimmed || API_ORIGIN
   }, [apiOrigin])
-  const apiPrefix = baseUrl
+
+  const socketUrl = useMemo(() => {
+    const trimmed = typeof apiOrigin === 'string' ? apiOrigin.trim().replace(/\/$/, '') : ''
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      try {
+        return new URL(trimmed).origin
+      } catch {
+        return SOCKET_IO_ORIGIN
+      }
+    }
+    return SOCKET_IO_ORIGIN
+  }, [apiOrigin])
 
   const hid = normalizeEntityId(hostelId)
   const oid = normalizeEntityId(ownerId)
@@ -176,7 +187,7 @@ export default function ChatModal({
   useEffect(() => {
     if (!open || !currentUserId || !hid || !oid) return
 
-    const socket = io(baseUrl, {
+    const socket = io(socketUrl, {
       path: '/socket.io',
       transports: ['websocket', 'polling'],
       withCredentials: true,
@@ -221,7 +232,7 @@ export default function ChatModal({
       socket.disconnect()
       socketRef.current = null
     }
-  }, [open, baseUrl, currentUserId, socketAuthToken, hid, oid])
+  }, [open, socketUrl, currentUserId, socketAuthToken, hid, oid])
 
   useEffect(() => {
     if (!open) return

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
 import { MessageCircle, Search, SendHorizontal } from 'lucide-react'
-import { API_ORIGIN } from '../../shared/apiConfig'
+import { API_ORIGIN, SOCKET_IO_ORIGIN } from '../../shared/apiConfig'
 
 function normalizeUserId(user) {
   if (!user || typeof user !== 'object') return null
@@ -94,11 +94,22 @@ export default function MessagePage({
   const socketRef = useRef(null)
   const activeThreadRef = useRef(null)
 
-  const baseUrl = useMemo(() => {
+  const apiPrefix = useMemo(() => {
     const trimmed = typeof apiOrigin === 'string' ? apiOrigin.trim().replace(/\/$/, '') : ''
     return trimmed || API_ORIGIN
   }, [apiOrigin])
-  const apiPrefix = baseUrl
+
+  const socketUrl = useMemo(() => {
+    const trimmed = typeof apiOrigin === 'string' ? apiOrigin.trim().replace(/\/$/, '') : ''
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      try {
+        return new URL(trimmed).origin
+      } catch {
+        return SOCKET_IO_ORIGIN
+      }
+    }
+    return SOCKET_IO_ORIGIN
+  }, [apiOrigin])
 
   const conversations = useMemo(() => {
     if (useApiInbox) return apiConversations
@@ -238,7 +249,7 @@ export default function MessagePage({
   useEffect(() => {
     if (!currentUserId) return
 
-    const socket = io(baseUrl, {
+    const socket = io(socketUrl, {
       path: '/socket.io',
       transports: ['websocket', 'polling'],
       withCredentials: true,
@@ -272,7 +283,7 @@ export default function MessagePage({
       socket.disconnect()
       socketRef.current = null
     }
-  }, [baseUrl, currentUserId, socketAuthToken])
+  }, [socketUrl, currentUserId, socketAuthToken])
 
   useEffect(() => {
     const socket = socketRef.current

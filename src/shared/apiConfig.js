@@ -14,7 +14,7 @@ const explicitApiBase =
 
 export const API_BASE_URL = explicitApiBase !== '' ? explicitApiBase : '/api'
 
-/** HTTP origin for `fetch`, Socket.IO, and `${origin}/api/...` when using relative `/api`. */
+/** HTTP origin for REST `fetch` / `${origin}/api/...` when using relative `/api`. */
 export const API_ORIGIN = (() => {
   if (API_BASE_URL.startsWith('http://') || API_BASE_URL.startsWith('https://')) {
     try {
@@ -24,6 +24,37 @@ export const API_ORIGIN = (() => {
     }
   }
   if (typeof globalThis !== 'undefined' && globalThis.location?.origin) {
+    return globalThis.location.origin
+  }
+  return RAILWAY_API_ORIGIN
+})()
+
+/**
+ * Socket.IO must hit the real server host. Vercel → external rewrites do not reliably
+ * proxy WebSockets; when `API_BASE_URL` is same-origin `/api`, use Railway here.
+ * Optional `VITE_SOCKET_URL` (any URL on the socket server) overrides.
+ */
+export const SOCKET_IO_ORIGIN = (() => {
+  const raw =
+    typeof import.meta.env.VITE_SOCKET_URL === 'string'
+      ? import.meta.env.VITE_SOCKET_URL.trim()
+      : ''
+  if (raw) {
+    try {
+      return new URL(raw).origin
+    } catch {
+      return raw.replace(/\/$/, '')
+    }
+  }
+  if (API_BASE_URL.startsWith('http://') || API_BASE_URL.startsWith('https://')) {
+    try {
+      return new URL(API_BASE_URL).origin
+    } catch {
+      return RAILWAY_API_ORIGIN
+    }
+  }
+  /** Dev: same origin + Vite proxy for `/socket.io`. Prod (Vercel): edge rewrite is unreliable for WS → Railway. */
+  if (import.meta.env.DEV && typeof globalThis !== 'undefined' && globalThis.location?.origin) {
     return globalThis.location.origin
   }
   return RAILWAY_API_ORIGIN

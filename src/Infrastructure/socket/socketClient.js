@@ -1,30 +1,8 @@
 import { io } from 'socket.io-client'
-import { API_BASE_URL } from '../../shared/apiConfig'
+import { SOCKET_IO_ORIGIN } from '../../shared/apiConfig'
 
-/**
- * Socket.IO uses the API host origin (no `/api` suffix).
- * Override with VITE_SOCKET_URL if the socket is served from a different origin.
- */
-const getSocketBaseUrl = () => {
-  const envUrl = import.meta.env.VITE_SOCKET_URL
-  if (envUrl && String(envUrl).trim()) {
-    return String(envUrl).replace(/\/$/, '')
-  }
-
-  if (typeof API_BASE_URL === 'string' && API_BASE_URL.startsWith('http')) {
-    try {
-      return new URL(API_BASE_URL).origin
-    } catch {
-      return ''
-    }
-  }
-
-  if (typeof window !== 'undefined') {
-    return window.location.origin
-  }
-
-  return ''
-}
+/** Same logic as `SOCKET_IO_ORIGIN` in apiConfig (Railway when REST uses `/api` proxy). */
+const getSocketBaseUrl = () => SOCKET_IO_ORIGIN
 
 let socket = null
 
@@ -32,6 +10,7 @@ export const getSocket = () => {
   if (!socket) {
     const url = getSocketBaseUrl()
     socket = io(url, {
+      path: '/socket.io',
       autoConnect: false,
       withCredentials: true,
       transports: ['websocket', 'polling'],
