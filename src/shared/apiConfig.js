@@ -1,21 +1,18 @@
 import axios from 'axios'
 
-/** Production API on Railway (no localhost). */
+/** Fallback origin when `API_BASE_URL` is absolute or `location` is unavailable. */
 const RAILWAY_API_ORIGIN = 'https://ten100compkdeploy-production.up.railway.app'
-const RAILWAY_API_BASE = `${RAILWAY_API_ORIGIN}/api`
 
 /**
- * - `VITE_API_BASE_URL` if set (full URL, no trailing slash).
- * - Dev (`npm run dev`): `/api` — Vite proxies to Railway → same-origin, no browser CORS.
- * - Production build: direct Railway URL (configure CORS on the API for your live site).
+ * Default: same-origin `/api` (Vite dev proxy + Vercel rewrites → Railway). No browser CORS to Railway.
+ * Set `VITE_API_BASE_URL` to a full URL only if you call the API directly and CORS is configured there.
  */
 const explicitApiBase =
   typeof import.meta.env.VITE_API_BASE_URL === 'string'
     ? import.meta.env.VITE_API_BASE_URL.trim().replace(/\/$/, '')
     : ''
 
-export const API_BASE_URL =
-  explicitApiBase !== '' ? explicitApiBase : import.meta.env.DEV ? '/api' : RAILWAY_API_BASE
+export const API_BASE_URL = explicitApiBase !== '' ? explicitApiBase : '/api'
 
 /** HTTP origin for `fetch`, Socket.IO, and `${origin}/api/...` when using relative `/api`. */
 export const API_ORIGIN = (() => {

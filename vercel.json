@@ -1,3 +1,17 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://ten100compkdeploy-production.up.railway.app/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://ten100compkdeploy-production.up.railway.app/uploads/:path*"
+    },
+    {
+      "source": "/socket.io/:path*",
+      "destination": "https://ten100compkdeploy-production.up.railway.app/socket.io/:path*"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
