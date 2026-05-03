@@ -30,9 +30,10 @@ export const API_ORIGIN = (() => {
 })()
 
 /**
- * Socket.IO must hit the real server host. Vercel → external rewrites do not reliably
- * proxy WebSockets; when `API_BASE_URL` is same-origin `/api`, use Railway here.
- * Optional `VITE_SOCKET_URL` (any URL on the socket server) overrides.
+ * Socket.IO should use the **same origin as the page** when `API_BASE_URL` is `/api`.
+ * Then `withCredentials` sends the same session cookies as REST (Vite or Vercel rewrites
+ * forward `/socket.io` to Railway). Connecting straight to Railway breaks cookies (cross-site).
+ * Optional `VITE_SOCKET_URL` overrides (use origin of that URL).
  */
 export const SOCKET_IO_ORIGIN = (() => {
   const raw =
@@ -53,8 +54,7 @@ export const SOCKET_IO_ORIGIN = (() => {
       return RAILWAY_API_ORIGIN
     }
   }
-  /** Dev: same origin + Vite proxy for `/socket.io`. Prod (Vercel): edge rewrite is unreliable for WS → Railway. */
-  if (import.meta.env.DEV && typeof globalThis !== 'undefined' && globalThis.location?.origin) {
+  if (typeof globalThis !== 'undefined' && globalThis.location?.origin) {
     return globalThis.location.origin
   }
   return RAILWAY_API_ORIGIN

@@ -189,7 +189,7 @@ export default function ChatModal({
 
     const socket = io(socketUrl, {
       path: '/socket.io',
-      transports: ['websocket', 'polling'],
+      transports: ['polling', 'websocket'],
       withCredentials: true,
       ...(socketAuthToken ? { auth: { token: socketAuthToken } } : {}),
     })
