@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #ff385c;
+  --color-secondary: #222222;
+  --color-background: #f7f7f7;
+  --color-surface: #ffffff;
+  --color-text-primary: #222222;
+  --color-text-secondary: #717171;
+  --color-border: #dddddd;
+  --color-success: #2ecc71;
+  --color-danger: #e74c3c;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.ui-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.ui-primary-button {
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  transition: filter 160ms ease;
+}
+
+.ui-primary-button:hover {
+  filter: brightness(0.96);
+}
+
+@keyframes appRouteEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-route-enter {
+    animation: none;
+  }
+}
+
+.app-route-enter {
+  animation: appRouteEnter 0.32s ease-out both;
+}
+
+@keyframes softFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+}
+
+.hover-lift {
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.14);
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 232, 240, 1) 20%,
+    rgba(241, 245, 249, 1) 40%,
+    rgba(226, 232, 240, 1) 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+
+.soft-float {
+  animation: softFloat 3.4s ease-in-out infinite;
+}
